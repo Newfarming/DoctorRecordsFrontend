@@ -1,0 +1,156 @@
+<template>
+  <div class="page-scan">
+    <!--返回-->
+    <div style="text-align: center;padding:10px 0;">
+      <el-button type="primary" style="margin-right: 40px;" @click="clickIndexLeft">取消</el-button>
+      <el-button @click="clickReload">刷新</el-button>
+    </div>
+    <!-- 扫码区域 -->
+    <video id="video" ref="video" class="scan-video" autoplay />
+    <!-- 提示语 -->
+    <div v-show="tipShow" class="scan-tip"> {{ tipMsg }} </div>
+  </div>
+</template>
+
+<script>
+import { BrowserMultiFormatReader } from '@zxing/library'
+// import { Dialog, Notify } from 'vant'
+
+export default {
+  name: 'ScanCodePage',
+  data() {
+    return {
+      loadingShow: false,
+      codeReader: null,
+      scanText: '',
+      vin: null,
+      tipMsg: '正在尝试识别....',
+      tipShow: false
+    }
+  },
+  watch: {
+    '$route'(to, from) {
+      if (to.path == '/scanCodePage') {
+        this.codeReader = new BrowserMultiFormatReader()
+        this.openScanTwo()
+      }
+    }
+  },
+  mounted() {
+    this.codeReader = new BrowserMultiFormatReader()
+    this.openScan()
+  },
+  destroyed() {
+    // this.codeReader.stopContinuousDecode()
+    this.codeReader.reset()
+  },
+  methods: {
+    clickReload() {
+      location.reload()
+    },
+    async openScan() {
+      this.codeReader.getVideoInputDevices().then((videoInputDevices) => {
+        this.tipShow = true
+        this.tipMsg = '正在调用摄像头...'
+        console.log('videoInputDevices', videoInputDevices)
+        // 默认获取第一个摄像头设备id
+        let firstDeviceId = videoInputDevices[0].deviceId
+        // 获取第一个摄像头设备的名称
+        const videoInputDeviceslablestr = JSON.stringify(videoInputDevices[0].label)
+        if (videoInputDevices.length > 1) {
+          // 判断是否后置摄像头
+          if (videoInputDeviceslablestr.indexOf('back') > -1) {
+            firstDeviceId = videoInputDevices[0].deviceId
+          } else {
+            firstDeviceId = videoInputDevices[1].deviceId
+          }
+        }
+        this.decodeFromInputVideoFunc(firstDeviceId)
+      }).catch(err => {
+        this.tipShow = false
+        console.error(err)
+      })
+    },
+    async openScanTwo() {
+      this.codeReader = await new BrowserMultiFormatReader()
+      this.codeReader.getVideoInputDevices().then((videoInputDevices) => {
+        this.tipShow = true
+        this.tipMsg = '正在调用摄像头...'
+        console.log('videoInputDevices', videoInputDevices)
+        // 默认获取第一个摄像头设备id
+        let firstDeviceId = videoInputDevices[0].deviceId
+        // 获取第一个摄像头设备的名称
+        const videoInputDeviceslablestr = JSON.stringify(videoInputDevices[0].label)
+        if (videoInputDevices.length > 1) {
+          // 判断是否后置摄像头
+          if (videoInputDeviceslablestr.indexOf('back') > -1) {
+            firstDeviceId = videoInputDevices[0].deviceId
+          } else {
+            firstDeviceId = videoInputDevices[1].deviceId
+          }
+        }
+        this.decodeFromInputVideoFunc(firstDeviceId)
+      }).catch(err => {
+        this.tipShow = false
+        console.error(err)
+      })
+    },
+    decodeFromInputVideoFunc(firstDeviceId) {
+      this.codeReader.reset() // 重置
+      this.scanText = ''
+      this.codeReader.decodeFromInputVideoDeviceContinuously(firstDeviceId, 'video', (result, err) => {
+        this.tipMsg = '正在尝试识别...'
+        this.scanText = ''
+        if (result) {
+          console.log('扫描结果', result)
+          this.scanText = result.text
+          if (this.scanText) {
+            this.tipShow = false
+            // this.codeReader.stopContinuousDecode()
+            this.$router.replace('/activity/activity-details/' + 123)
+            // location.href = '/#/activity/activity-details/' + 123
+            // 这部分接下去的代码根据需要，读者自行编写了
+            // this.$store.commit('app/SET_SCANTEXT', result.text);
+            // console.log('已扫描的小票列表', this.$store.getters.scanTextArr);
+          }
+        }
+        if (err && !(err)) {
+          this.tipMsg = '识别失败'
+          setTimeout(() => {
+            this.tipShow = false
+          }, 2000)
+          console.error(err)
+        }
+      })
+    },
+    clickIndexLeft() { // 返回上一页
+      this.codeReader = null
+      this.$destroy()
+      this.$router.back()
+    }
+  }
+}
+</script>
+
+<style lang="scss">
+.scan-index-bar{
+  background-image: linear-gradient( -45deg, #42a5ff ,#59cfff);
+}
+.van-nav-bar__title{
+  color: #fff !important;
+}
+.scan-video{
+  height: 80vh;
+}
+.scan-tip{
+  width: 100vw;
+  text-align: center;
+  margin-bottom: 10vh;
+  color: white;
+  font-size: 5vw;
+}
+.page-scan{
+  overflow-y: hidden;
+  background-color: #363636;
+}
+</style>
