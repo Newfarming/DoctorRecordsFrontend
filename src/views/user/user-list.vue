@@ -24,25 +24,25 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')" @click="handleJumpDetails(row)">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="姓名" min-width="150px">
+      <el-table-column label="姓名" min-width="150px" @click="handleJumpDetails(row)">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleJumpEdit(row)">{{ row.name }}</span>
+          <span class="link-type" >{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="手机号" min-width="150px">
+      <el-table-column label="手机号" min-width="150px" @click="handleJumpDetails(row)">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleJumpEdit(row)">{{ row.phone }}</span>
+          <span class="link-type">{{ row.phone }}</span>
           <!--          <el-tag>{{ row.type | typeFilter }}</el-tag>-->
         </template>
       </el-table-column>
-      <el-table-column label="部门" min-width="150px">
+      <el-table-column label="部门" min-width="150px" @click="handleJumpDetails(row)">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleJumpEdit(row)">{{ row.depart_name }}</span>
+          <span class="link-type">{{ row.depart_name }}</span>
           <!--          <el-tag>{{ row.type | typeFilter }}</el-tag>-->
         </template>
       </el-table-column>
@@ -51,6 +51,9 @@
 <!--          <el-button v-show="permission_type.indexOf('4')>=0" type="primary" size="mini" @click="handleJumpEdit(row)">-->
 <!--            编辑-->
 <!--          </el-button>-->
+          <el-button size="mini" type="success" @click="handleJumpDetails(row)">
+            查看
+          </el-button>
           <el-button size="mini" type="primary" @click="handleJumpEdit(row)">
             编辑
           </el-button>

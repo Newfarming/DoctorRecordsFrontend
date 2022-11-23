@@ -79,7 +79,7 @@
               <el-upload
                 v-show="item.study_certificate_pic.length==0"
                 class="upload-demo"
-                :action="save_img_url"
+                action="http://192.168.250.190/DoctorRecordsServerApp/saveimage/"
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
                 :before-remove="beforeRemove"
@@ -146,7 +146,7 @@
               <el-upload
                 v-show="item.award_certificate_pic.length==0"
                 class="upload-demo"
-                :action="save_img_url"
+                action="http://192.168.250.190/DoctorRecordsServerApp/saveimage/"
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
                 :before-remove="beforeRemove"
@@ -214,7 +214,7 @@
               <el-upload
                 v-show="item.patents_certificate_pic.length==0"
                 class="upload-demo"
-                :action="save_img_url"
+                action="http://192.168.250.190/DoctorRecordsServerApp/saveimage/"
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
                 :before-remove="beforeRemove"
@@ -267,7 +267,7 @@
               <el-upload
                 v-show="item.award_certificate_pic.length==0"
                 class="upload-demo"
-                :action="save_img_url"
+                action="http://192.168.250.190/DoctorRecordsServerApp/saveimage/"
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
                 :before-remove="beforeRemove"
@@ -302,7 +302,7 @@
                 ref="upload_surgical"
                 class="upload-demo"
                 style="display:inline-block"
-                :action="save_img_url"
+                action="http://192.168.250.190/DoctorRecordsServerApp/saveimage/"
                 :on-remove="handleRemove"
                 :before-remove="beforeRemove"
                 :limit="1"
@@ -510,6 +510,55 @@ export default {
       })
     },
     userEdit() {
+      if (this.userinfo.depart_id === '') {
+        alert('请选择科室')
+        return
+      }
+      if (this.userinfo.birthday === '') {
+        alert('请填写生日')
+        return
+      }
+      if (this.userinfo.working_time === '') {
+        alert('请填写参加工作时间')
+        return
+      }
+      let tempDel = true
+      this.userinfo.ProfessionalTitleList.forEach(function(item, index) {
+        if (item.engage_time === '') {
+          alert('请填写聘任时间')
+          tempDel = false
+          return false
+        }
+      })
+      this.userinfo.OutTableList.forEach(function(item, index) {
+        if (item.study_time === '') {
+          alert('请填写外出学习时间')
+          tempDel = false
+          return false
+        }
+      })
+      this.userinfo.ResearchPapersList.forEach(function(item, index) {
+        if (item.publication_time === '') {
+          alert('请填写论文发表时间')
+          tempDel = false
+          return false
+        }
+      })
+      this.userinfo.NewTechResearchList.forEach(function(item, index) {
+        if (item.approved_time === '') {
+          alert('请填写获准开展时间')
+          tempDel = false
+          return false
+        }
+        if (item.to_nomal_time === '') {
+          alert('请填写转常规开展时间')
+          tempDel = false
+          return false
+        }
+      })
+      if (tempDel === false) {
+        return
+      }
       userEdit(this.userinfo).then(response => {
         if (response.data === 'success') {
           this.$router.push('/user/user-list/')

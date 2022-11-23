@@ -1,47 +1,60 @@
 <template>
   <div class="m-activity_details">
-    <div class="m-dangan">
+    <div>
+      <span style="margin-right: 10px;">科室:</span>
+      <el-select v-model="userinfo.depart_id" disabled placeholder="请选择科室" clearable class="filter-item" style="width: 120px;margin-right: 10px;">
+        <el-option v-for="item in depart" :key="item.id" :label="item.title" :value="item.id" />
+      </el-select>
+    </div>
+    <div class="m-dangan" style="margin-top:10px; margin-bottom:10px;">
       <div class="line">
         <div class="ibox">姓名</div>
         <div class="ibox">{{userinfo.name}}</div>
         <div class="ibox">性别</div>
-        <div class="ibox">{{ userinfo.sex }}</div>
+        <div class="ibox">
+          {{userinfo.sex}}
+        </div>
         <div class="ibox">生日</div>
-        <div class="ibox">{{userinfo.birthday}}</div>
+        <div class="ibox">
+          {{userinfo.birthday}}
+        </div>
       </div>
       <div class="line">
         <div class="ibox">学历</div>
-        <div class="ibox">{{ userinfo.education }}</div>
+        <div class="ibox">{{userinfo.education}}</div>
         <div class="ibox">学位</div>
-        <div class="ibox">{{ userinfo.academic_degree }}</div>
+        <div class="ibox">{{userinfo.academic_degree}}</div>
         <div class="ibox">专业</div>
-        <div class="ibox">{{ userinfo.major }}</div>
+        <div class="ibox">{{userinfo.major}}</div>
       </div>
       <div class="line">
         <div class="ibox">毕业院校</div>
-        <div class="ibox">{{ userinfo.graduated_school }}</div>
+        <div class="ibox">{{userinfo.graduated_school}}</div>
         <div class="ibox">参加工作时间</div>
-        <div class="ibox">{{ userinfo.working_time }}</div>
+        <div class="ibox">{{userinfo.working_time}}</div>
         <div class="ibox">联系电话</div>
-        <div class="ibox">{{ userinfo.phone }}</div>
+        <div class="ibox">{{userinfo.phone}}</div>
       </div>
       <div class="zuoyou clearfix">
-        <div class="zuoyou-left">职称情况</div>
+        <div class="zuoyou-left">职称情况
+        </div>
         <div class="zuoyou-right">
           <div class="right-line">
             <div class="bx">职称</div>
-            <div class="bx">聘任时间(X年X月)</div>
+            <div class="bx">聘任时间</div>
             <div class="bx bx-3">资格证书编号</div>
           </div>
-          <div class="right-line" v-for="item in userinfo.professionalTitleList">
-            <div class="bx">{{item.title}}</div>
-            <div class="bx">聘任时间(X年X月)</div>
-            <div class="bx bx-3">资格证书编号</div>
+          <div v-for="(item,index) in userinfo.ProfessionalTitleList" :key="index" class="right-line">
+            <div class="bx">{{item.name}}</div>
+            <div class="bx">{{item.engage_time}}</div>
+            <div class="bx bx-3">{{item.certificate_number}}</div>
           </div>
         </div>
       </div>
       <div class="zuoyou clearfix">
-        <div class="zuoyou-left">进修（外出学习）情况</div>
+        <div class="zuoyou-left">
+          进修（外出学习）情况
+        </div>
         <div class="zuoyou-right">
           <div class="right-line">
             <div class="bx bx-2">进修时间（年/月-年/月）</div>
@@ -49,102 +62,125 @@
             <div class="bx bx-2">进修专业</div>
             <div class="bx">进修照片</div>
           </div>
-          <div class="right-line" v-for="item in userinfo.studyTableList">
+          <div v-for="(item, index) in userinfo.StudyTableList" :key="index" class="right-line">
+            <div class="bx bx-2">{{item.study_time}}</div>
+            <div class="bx">{{item.study_hospital}}</div>
+            <div class="bx bx-2">{{item.study_major}}</div>
+            <div class="bx">
+              <a v-show="item.study_certificate_pic.length>0" class="a-jump" :href="item.study_certificate_pic" target="_blank">查看图片</a>
+            </div>
+          </div>
+          <div class="right-line">
+            <div class="bx bx-2">外出学习时间（年/月/日)</div>
+            <div class="bx">地点</div>
+            <div class="bx bx-4">学习会议名称</div>
+          </div>
+          <div v-for="(item, index) in userinfo.OutTableList" :key="index" class="right-line">
+            <div class="bx bx-2">{{item.out_study_time}}</div>
+            <div class="bx">{{item.out_study_place}}</div>
+            <div class="bx bx-4">{{item.out_study_meeting}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="zuoyou clearfix">
+        <div class="zuoyou-left">
+          科研项目
+        </div>
+        <div class="zuoyou-right">
+          <div class="right-line">
+            <div class="bx">立项时间</div>
+            <div class="bx">立项类型</div>
+            <div class="bx bx-3">题目</div>
+          </div>
+          <div v-for="(item,index) in userinfo.ResearchProjectList" :key="index" class="right-line">
+            <div class="bx">{{item.start_time}}</div>
+            <div class="bx">{{item.start_type}}</div>
+            <div class="bx bx-3">{{item.title}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="zuoyou clearfix">
+        <div class="zuoyou-left">
+          科研获奖
+        </div>
+        <div class="zuoyou-right">
+          <div class="right-line">
+            <div class="bx">获奖年度</div>
+            <div class="bx">获奖级别</div>
+            <div class="bx bx-2">获奖项目名称</div>
+            <div class="bx bx-2">上传获奖证书</div>
+          </div>
+          <div v-for="(item, index) in userinfo.ResearchAwardList" :key="index" class="right-line">
+            <div class="bx">{{item.award_time}}</div>
+            <div class="bx">{{item.award_rank}}</div>
+            <div class="bx bx-2">{{item.award_name}}</div>
+            <div class="bx bx-2">
+              <a v-show="item.award_certificate_pic.length>0" class="a-jump" :href="item.award_certificate_pic" target="_blank">查看图片</a>
+            </div>
+            <div class="delete" @click="removeList(userinfo.ResearchAwardList, index)">删除</div>
+          </div>
+        </div>
+      </div>
+      <div class="zuoyou clearfix">
+        <div class="zuoyou-left">
+          科研论文
+        </div>
+        <div class="zuoyou-right">
+          <div class="right-line">
+            <div class="bx bx-2">发表时间（X年X月）</div>
+            <div class="bx">期刊名称</div>
+            <div class="bx bx-2">项目名称</div>
+            <div class="bx">级别</div>
+          </div>
+          <div v-for="(item,index) in userinfo.ResearchPapersList" :key="index" class="right-line">
+            <div class="bx bx-2">{{item.publication_time}}</div>
+            <div class="bx">{{item.journal_name}}</div>
+            <div class="bx bx-2">{{item.project_name}}</div>
+            <div class="bx">
+              {{item.project_rank}}
+              <!--              <input v-model="item.project_rank" class="input-text-box" type="text">-->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="zuoyou clearfix">
+        <div class="zuoyou-left">
+          获取专利情况
+        </div>
+        <div class="zuoyou-right">
+          <div class="right-line">
+            <div class="bx bx-2">年度</div>
+            <div class="bx">类别</div>
+            <div class="bx bx-2">项目名称</div>
+            <div class="bx">上传证书</div>
+          </div>
+          <div v-for="(item,index) in userinfo.ObtainPatentsList" :key="index" class="right-line">
+            <div class="bx bx-2">{{item.get_time}}</div>
+            <div class="bx">
+              {{item.type}}
+              <!--              <input v-model="item.project_rank" class="input-text-box" type="text">-->
+            </div>
             <div class="bx bx-2">{{item.name}}</div>
-            <div class="bx">进修医院名称</div>
-            <div class="bx bx-2">进修专业</div>
-            <div class="bx">进修照片</div>
-          </div>
-          <div class="right-line">
-            <div class="bx bx-2">外出学习时间（年/月-年/月</div>
-            <div class="bx">地点</div>
-            <div class="bx bx-4">学习会议名称</div>
-          </div>
-          <div class="right-line" v-for="item in userinfo.outTableList">
-            <div class="bx bx-2">外出学习时间（年/月-年/月</div>
-            <div class="bx">地点</div>
-            <div class="bx bx-4">学习会议名称</div>
+            <div class="bx">
+              <a v-show="item.patents_certificate_pic.length>0" class="a-jump" :href="item.patents_certificate_pic" target="_blank">查看图片</a>
+            </div>
           </div>
         </div>
       </div>
       <div class="zuoyou clearfix">
-        <div class="zuoyou-left">科研项目</div>
-        <div class="zuoyou-right">
-          <div class="right-line">
-            <div class="bx">立项时间</div>
-            <div class="bx">立项类型</div>
-            <div class="bx bx-3">题目</div>
-          </div>
-          <div class="right-line" v-for="item in userinfo.researchProjectList">
-            <div class="bx">立项时间</div>
-            <div class="bx">立项类型</div>
-            <div class="bx bx-3">题目</div>
-          </div>
+        <div class="zuoyou-left">
+          新技术开展情况
         </div>
-      </div>
-      <div class="zuoyou clearfix">
-        <div class="zuoyou-left">科研获奖</div>
-        <div class="zuoyou-right">
-          <div class="right-line">
-            <div class="bx">获奖年度</div>
-            <div class="bx">获奖级别</div>
-            <div class="bx bx-2">获奖项目名称</div>
-            <div class="bx bx-2">上传获奖证书</div>
-          </div>
-          <div class="right-line" v-for="item in userinfo.researchAwardList">
-            <div class="bx">获奖年度</div>
-            <div class="bx">获奖级别</div>
-            <div class="bx bx-2">获奖项目名称</div>
-            <div class="bx bx-2">上传获奖证书</div>
-          </div>
-        </div>
-      </div>
-      <div class="zuoyou clearfix">
-        <div class="zuoyou-left">科研论文</div>
-        <div class="zuoyou-right">
-          <div class="right-line">
-            <div class="bx bx-2">发表时间（年/月-年/月）</div>
-            <div class="bx">期刊名称</div>
-            <div class="bx bx-2">项目名称</div>
-            <div class="bx">级别</div>
-          </div>
-          <div class="right-line" v-for="item in userinfo.researchPapersList">
-            <div class="bx bx-2">发表时间（年/月-年/月）</div>
-            <div class="bx">期刊名称</div>
-            <div class="bx bx-2">项目名称</div>
-            <div class="bx">级别</div>
-          </div>
-        </div>
-      </div>
-      <div class="zuoyou clearfix">
-        <div class="zuoyou-left">获取专利情况</div>
-        <div class="zuoyou-right">
-          <div class="right-line">
-            <div class="bx bx-2">年度（年/月-年/月）</div>
-            <div class="bx">类别</div>
-            <div class="bx bx-2">项目名称</div>
-            <div class="bx">上传证书</div>
-          </div>
-          <div class="right-line" v-for="item in userinfo.obtainPatentsList">
-            <div class="bx bx-2">年度（年/月-年/月）</div>
-            <div class="bx">类别</div>
-            <div class="bx bx-2">项目名称</div>
-            <div class="bx">上传证书</div>
-          </div>
-        </div>
-      </div>
-      <div class="zuoyou clearfix">
-        <div class="zuoyou-left">新技术开展情况</div>
         <div class="zuoyou-right">
           <div class="right-line">
             <div class="bx bx-2">获准开展时间</div>
             <div class="bx">转常规开展时间</div>
             <div class="bx bx-4">项目名称</div>
           </div>
-          <div class="right-line" v-for="item in userinfo.newTechResearchList">
-            <div class="bx bx-2">获准开展时间</div>
-            <div class="bx">转常规开展时间</div>
-            <div class="bx bx-4">项目名称</div>
+          <div v-for="(item,index) in userinfo.NewTechResearchList" :key="index" class="right-line">
+            <div class="bx bx-2">{{item.approved_time}}</div>
+            <div class="bx">{{item.to_nomal_time}}</div>
+            <div class="bx bx-4">{{item.name}}</div>
           </div>
         </div>
       </div>
@@ -157,11 +193,13 @@
             <div class="bx bx-2">获奖项目名称</div>
             <div class="bx">上传获奖证书</div>
           </div>
-          <div class="right-line" v-for="item in userinfo.newTechAwardList">
-            <div class="bx bx-2">{{ item.fields.get_year }}</div>
-            <div class="bx">{{item.fields.award_rank}}</div>
-            <div class="bx bx-2">{{item.fields.award_name}}</div>
-            <div class="bx">{{ item.fields.award_certificate_pic }}</div>
+          <div v-for="(item, index) in userinfo.NewTechAwardList" :key="index" class="right-line">
+            <div class="bx bx-2">{{item.get_year}}</div>
+            <div class="bx">{{item.award_rank }}</div>
+            <div class="bx bx-2">{{item.award_name }}</div>
+            <div class="bx">
+              <a v-show="item.award_certificate_pic.length>0" class="a-jump" :href="item.award_certificate_pic" target="_blank">查看图片</a>
+            </div>
           </div>
         </div>
       </div>
@@ -169,8 +207,31 @@
         <div class="zuoyou-left">手术资质</div>
         <div class="zuoyou-right">
           <div class="right-line">
-            <div class="bx bx-5"><input type="checkbox" ><span class="ckword">一级</span> <input type="checkbox"><span class="ckword">二级</span> <input type="checkbox"><span class="ckword">三级</span>  <input type="checkbox"><span class="ckword">四级</span></div>
-            <div class="bx">上传授权表</div>
+            <div class="bx bx-5">
+              <input id="shoushu1" v-model="userinfo.surgical_qualification_1" disabled type="checkbox" value="一级"><label for="shoushu1" class="ckword">一级</label>
+              <input id="shoushu2" v-model="userinfo.surgical_qualification_2" disabled type="checkbox" value="二级"><label for="shoushu2" class="ckword">二级</label>
+              <input id="shoushu3" v-model="userinfo.surgical_qualification_3" disabled type="checkbox" value="三级"><label for="shoushu3" class="ckword">三级</label>
+              <input id="shoushu4" v-model="userinfo.surgical_qualification_4" disabled type="checkbox" value="四级"><label for="shoushu4" class="ckword">四级</label>
+            </div>
+            <div
+              class="bx"
+              style="width:275px;"
+            >
+              <a v-show="userinfo.surgical_qualification_certificate_pic.length>0" class="a-jump" style="margin-right: 15px;" :href="userinfo.surgical_qualification_certificate_pic" target="_blank">查看授权表</a>
+              <el-upload
+                ref="upload_surgical"
+                class="upload-demo"
+                style="display:inline-block"
+                action="http://192.168.250.190/DoctorRecordsServerApp/saveimage/"
+                :on-remove="handleRemove"
+                :before-remove="beforeRemove"
+                :limit="1"
+                :on-exceed="handleExceed"
+                :on-success="uploadImgSuccess(userinfo,'surgical_qualification_certificate_pic')"
+                :show-file-list="false"
+              >
+              </el-upload>
+            </div>
           </div>
         </div>
       </div>
@@ -178,34 +239,34 @@
         <div class="zuoyou-left">处方权限</div>
         <div class="zuoyou-right">
           <div class="right-line oneline">
-            <span>普通处方权：</span>
-            <input type="checkbox">
+            <label for="putongchufang" value="prescription_normal">普通处方权：</label>
+            <input id="putongchufang" disabled v-model="userinfo.prescription_normal" type="checkbox">
           </div>
           <div class="right-line oneline">
             <span>抗菌药物：</span>
-            <input type="checkbox"><span class="ckword">非限制类</span>
-            <input type="checkbox"><span class="ckword">限制类</span>
-            <input type="checkbox"><span class="ckword">特殊级抗菌药物</span>
+            <input id="kangjunfeixianzhi" disabled v-model="userinfo.prescription_Antibacterials_unrestricted" type="checkbox"><label for="kangjunfeixianzhi" class="ckword">非限制类</label>
+            <input id="kangjunxianzhi" disabled v-model="userinfo.prescription_Antibacterials_restricted" type="checkbox"><label class="ckword" for="kangjunxianzhi">限制类</label>
+            <input id="kangjunteshu" disabled v-model="userinfo.prescription_Antibacterials_special" type="checkbox"><label class="ckword" for="kangjunteshu">特殊级抗菌药物</label>
           </div>
           <div class="right-line oneline">
             <span>抗肿瘤药物：</span>
-            <input type="checkbox"><span class="ckword">普通使用级</span>
-            <input type="checkbox"><span class="ckword">限制使用级</span>
+            <input id="putongshiyong" disabled v-model="userinfo.prescription_Antineoplastic_normal" type="checkbox"><label class="ckword" for="putongshiyong">普通使用级</label>
+            <input id="xianzhishiyong" disabled v-model="userinfo.prescription_Antineoplastic_limited" type="checkbox"><label class="ckword" for="xianzhishiyong">限制使用级</label>
           </div>
           <div class="right-line oneline">
             <span>麻醉精神类：</span>
-            <input type="checkbox"><span class="ckword">麻醉药品</span>
-            <input type="checkbox"><span class="ckword">第一类精神药品</span>
-            <input type="checkbox"><span class="ckword">第二类精神药品</span>
+            <input id="mazuilei" disabled v-model="userinfo.prescription_Narcotics_Narcotic_drugs" type="checkbox"><label class="ckword" for="mazuilei">麻醉药品</label>
+            <input id="jingshenyi" disabled v-model="userinfo.prescription_Narcotics_Psychotropic_first" type="checkbox"><label class="ckword" for="jingshenyi">第一类精神药品</label>
+            <input id="jingshener" disabled v-model="userinfo.prescription_Narcotics_Psychotropic_second" type="checkbox"><label class="ckword" for="jingshener">第二类精神药品</label>
           </div>
           <div class="right-line oneline">
             <span>皮质激素类药物：</span>
-            <input type="checkbox"><span class="ckword">短中程使用糖皮质激素</span>
-            <input type="checkbox"><span class="ckword">冲击疗法、长疗程使用糖皮质激素 </span>
+            <input id="duanzhongcheng" disabled v-model="userinfo.prescription_Corticosteroids_Short_glucocorticoid" type="checkbox"><label class="ckword" for="duanzhongcheng">短中程使用糖皮质激素</label>
+            <input id="changqi" disabled v-model="userinfo.prescription_Corticosteroids_Long_glucocorticoid" type="checkbox"><label class="ckword" for="changqi">冲击疗法、长疗程使用糖皮质激素 </label>
           </div>
           <div class="right-line oneline">
-            <span>生物与血液制剂：</span>
-            <input type="checkbox">
+            <label for="shengwuxueye">生物与血液制剂：</label>
+            <input id="shengwuxueye" disabled v-model="userinfo.prescription_Biological_and_blood_preparations" type="checkbox">
           </div>
         </div>
       </div>
@@ -218,24 +279,8 @@
 </template>
 <script>
 import { getDepartList } from '@/api/table'
-import { userAdd, getUserDetails } from '@/api/user'
+import { userAdd, userEdit, getUserDetails } from '@/api/user'
 
-const activityStatusOptions = [
-  { key: 'processing', display_name: '进行中' },
-  { key: 'nostart', display_name: '未开始' },
-  { key: 'ended', display_name: '已结束' }
-]
-const TypeOptions = [
-  { key: '1', display_name: '普通权限' },
-  { key: '2', display_name: '高级权限' },
-  { key: '3', display_name: '最高权限' }
-]
-const departmentOptions = [
-  { key: '1', display_name: '事业发展科' },
-  { key: '2', display_name: '小区1' },
-  { key: '3', display_name: '小区2' },
-  { key: '4', display_name: '小区3' }
-]
 export default {
   name: 'UserList',
   components: { },
@@ -251,10 +296,14 @@ export default {
   },
   data() {
     return {
+      save_img_url: 'http://192.168.250.190/DoctorRecordsServerApp/saveimage/',
+      paper_rank: ['一般期刊', '科技核心', '中文核心', '外文', 'SCI'],
+      sex: ['男', '女'],
+      obtain_select: ['发明专利', '实用新型专利', '外观专利', '软件著作权'],
       userinfo: {
         'id': '',
         'name': '',
-        'sex':'',
+        'sex': '',
         'education': '',
         'academic_degree': '',
         'major': '',
@@ -262,7 +311,10 @@ export default {
         'working_time': '',
         'phone': '',
         'birthday': '',
-        'surgical_qualification': '',
+        'surgical_qualification_1': false,
+        'surgical_qualification_2': false,
+        'surgical_qualification_3': false,
+        'surgical_qualification_4': false,
         'surgical_qualification_certificate_pic': '',
         'prescription_normal': false,
         'prescription_Antibacterials_restricted': false,
@@ -278,19 +330,16 @@ export default {
         'prescription_Biological_and_blood_preparations': false,
         'depart_id': '',
         'depart_name': '',
-        'newTechAwardList': [],
-        'newTechResearchList': [],
-        'outTableList': [],
-        'obtainPatentsList': [],
-        'professionalTitleList': [],
-        'researchProjectList': [],
-        'researchAwardList': [],
-        'researchPapersList': [],
-        'studyTableList': []
+        'NewTechAwardList': [],
+        'NewTechResearchList': [],
+        'OutTableList': [],
+        'ObtainPatentsList': [],
+        'ProfessionalTitleList': [],
+        'ResearchProjectList': [],
+        'ResearchAwardList': [],
+        'ResearchPapersList': [],
+        'StudyTableList': []
       },
-      departmentOptions,
-      TypeOptions,
-      activityStatusOptions,
       rules: {
         type: [{ required: true, message: 'type is required', trigger: 'change' }],
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
@@ -311,7 +360,7 @@ export default {
       total: 0,
       tableKey: 0,
       list: null,
-      depart: null,
+      depart: [],
       listLoading: true,
       listQuery: {
         page: 1,
@@ -327,6 +376,25 @@ export default {
     this.fetchData()
   },
   methods: {
+    uploadImgSuccess(item, dataname) {
+      return function(res) {
+        console.log('uploadImgSuccess!!! item res', item, res)
+        item[dataname] = res.data.imgurl
+      }
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePreview(file) {
+      this.$refs['upload_surgical'].clearFiles()
+      console.log('handlePreview file', file)
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`)
+    },
     fetchData() {
       console.log('this.$route.params', this.$route.params)
       this.listLoading = true
@@ -336,27 +404,49 @@ export default {
         pageStart: 0,
         pagesize: 100
       }).then(response => {
-        this.depart = response.data
+        this.depart = response.data.slice(1)
         console.log('getDepartList response', response)
         this.listLoading = false
       })
       getUserDetails({
         id: this.$route.params.id
       }).then(response => {
-        console.log('user details info response', response)
+        // console.log('user details info response', response)
         this.userinfo = response.data
+        // this.userinfo.surgical_qualification = response.data.surgical_qualification.split(',')
         console.log('response.data', response.data)
       })
     },
+    testinput() {
+      console.log('input', this.userinfo.professionalTitleList)
+    },
     userAdd() {
-      userAdd(this.temp).then(response => {
+      // this.userinfo.surgical_qualification = this.userinfo.surgical_qualification.join(',')
+      userAdd(this.userinfo).then(response => {
         if (response.data === 'success') {
           this.$router.push('/user/user-list/')
         }
       })
     },
+    userEdit() {
+      userEdit(this.userinfo).then(response => {
+        if (response.data === 'success') {
+          this.$router.push('/user/user-list/')
+        }
+      })
+    },
+    addlist(obj, arr) {
+      obj.push(arr)
+    },
+    removeList(obj, index) {
+      console.log(this.userinfo)
+      obj.splice(index, 1)
+    },
     handleJumpLists() {
       this.$router.push('/user/user-list/')
+    },
+    handleEdit() {
+      this.userEdit()
     },
     handleAddUser() {
       this.userAdd()
