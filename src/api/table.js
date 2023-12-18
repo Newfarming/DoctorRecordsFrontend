@@ -29,8 +29,8 @@ export function departDelete(params) {
   params.token = getToken()
   return request({
     url: '/depart/delete',
-    method: 'get',
-    params
+    method: 'post',
+    data: params
   })
 }
 export function departEdit(params) {

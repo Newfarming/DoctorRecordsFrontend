@@ -20,7 +20,7 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="ID"  align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="ID" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
@@ -36,17 +36,17 @@
           <el-button v-show="permission_type.indexOf('1')>=0" type="primary" size="mini" @click="handleJumpEdit(row)">
             编辑
           </el-button>
-<!--          <el-button size="mini" type="success" @click="handleJumpDetails(row)">-->
-<!--            详情-->
-<!--          </el-button>-->
-          <el-button v-show="permission_type.indexOf('1')>=0"  size="mini" type="danger" @click="handleDelete(row,$index)">
+          <!--          <el-button size="mini" type="success" @click="handleJumpDetails(row)">-->
+          <!--            详情-->
+          <!--          </el-button>-->
+          <el-button v-show="permission_type.indexOf('1')>=0" size="mini" type="danger" @click="handleDelete(row,$index)">
             删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-<!--    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />-->
+    <!--    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />-->
   </div>
 </template>
 
@@ -55,7 +55,8 @@ import { getDepartList, departDelete } from '@/api/table'
 // import { userDelete } from '@/api/user'
 import { getPermissionTypeCookie } from '@/utils/auth' // secondary package based on el-pagination
 
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import Pagination from '@/components/Pagination'
+import { userDelete } from '@/api/user' // secondary package based on el-pagination
 
 const TypeOptions = [
   { key: '1', display_name: '姓名' },
@@ -107,7 +108,11 @@ export default {
         pageStart: 0,
         pagesize: 100
       }).then(response => {
-        this.depart = response.data
+        if (response.data[0] && response.data[0].account === 'admin') {
+          this.depart = response.data.slice(1)
+        } else {
+          this.depart = response.data
+        }
         this.listLoading = false
       })
     },
@@ -122,12 +127,16 @@ export default {
       this.$router.push('/department/department-add')
     },
     handleDelete(row) {
-      departDelete({
-        id: row.id
-      }).then(response => {
-        this.fetchData()
+      console.log('row', row)
+      const result = confirm('你确定要删除id为' + row.id + '的部门' + row.account + '吗')
+      if (result) {
+        departDelete({
+          id: row.id
+        }).then(response => {
+          this.fetchData()
         // this.listLoading = false
-      })
+        })
+      }
     },
     sortChange(data) {
       const { prop, order } = data
@@ -142,7 +151,7 @@ export default {
     handleFilter() {
       // this.listQuery.page = 1
       // this.get()
-    },
+    }
   }
 }
 </script>

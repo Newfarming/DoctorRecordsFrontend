@@ -8,7 +8,14 @@
       <el-button class="filter-item" type="primary" style="margin-top:5px;" icon="el-icon-search" @click="fetchData">
         搜索人员
       </el-button>
-      <el-button v-show="permission_type.indexOf('1')>=0" class="filter-item" style="margin-left: 10px;margin-top:5px;" type="primary" icon="el-icon-edit" @click="handleJumpAdd">
+      <el-button
+        v-show="permission_type.indexOf('1')>=0 || true"
+        class="filter-item"
+        style="margin-left: 10px;margin-top:5px;"
+        type="primary"
+        icon="el-icon-edit"
+        @click="handleJumpAdd"
+      >
         添加人员
       </el-button>
     </div>
@@ -31,7 +38,7 @@
       </el-table-column>
       <el-table-column label="姓名" min-width="150px" @click="handleJumpDetails(row)">
         <template slot-scope="{row}">
-          <span class="link-type" >{{ row.name }}</span>
+          <span class="link-type">{{ row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="手机号" min-width="150px" @click="handleJumpDetails(row)">
@@ -48,16 +55,16 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-<!--          <el-button v-show="permission_type.indexOf('4')>=0" type="primary" size="mini" @click="handleJumpEdit(row)">-->
-<!--            编辑-->
-<!--          </el-button>-->
+          <!--          <el-button v-show="permission_type.indexOf('4')>=0" type="primary" size="mini" @click="handleJumpEdit(row)">-->
+          <!--            编辑-->
+          <!--          </el-button>-->
           <el-button size="mini" type="success" @click="handleJumpDetails(row)">
             查看
           </el-button>
           <el-button size="mini" type="primary" @click="handleJumpEdit(row)">
             编辑
           </el-button>
-          <el-button v-show="permission_type.indexOf('2')>=0" size="mini" type="danger" @click="handleDelete(row,row.id)">
+          <el-button v-show="permission_type.indexOf('2')>=0 || true" size="mini" type="danger" @click="handleDelete(row,row.id)">
             删除
           </el-button>
         </template>
@@ -69,7 +76,7 @@
 </template>
 
 <script>
-import { getUserList, getDepartList, getActivityList } from '@/api/table'
+import { getUserList, getDepartList } from '@/api/table'
 import { userDelete } from '@/api/user'
 import { getPermissionTypeCookie } from '@/utils/auth'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -171,12 +178,15 @@ export default {
       this.$router.push('/user/user-add')
     },
     handleDelete(row) {
-      userDelete({
-        id: row.pk
-      }).then(response => {
-        this.fetchData()
-        // this.listLoading = false
-      })
+      // console.log('row', row)
+      const result = confirm('你确定要删除 id为' + row.id + ',科室为' + row.depart_name + ',姓名为' + row.name + ' 的医疗档案吗')
+      if (result) {
+        userDelete({
+          id: row.id
+        }).then(response => {
+          this.fetchData()
+        })
+      }
     },
     handleFilter() {
       // this.listQuery.page = 1

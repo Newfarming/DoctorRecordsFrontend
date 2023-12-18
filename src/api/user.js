@@ -58,7 +58,7 @@ export function userDelete(params) {
   params.token = getToken()
   return request({
     url: '/user/delete',
-    method: 'get',
+    method: 'post',
     data: params
   })
 }

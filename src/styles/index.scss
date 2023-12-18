@@ -101,7 +101,7 @@ div:focus {
         *zoom: 1;/*ie6清除浮动的方式 *号只有IE6-IE7执行，其他浏览器不执行*/
     }
 .m-dangan{
-  width: 1000px;
+  width: 1050px;
   *{box-sizing: border-box;}
   .line{
     width: 100%;
@@ -134,67 +134,116 @@ div:focus {
     clear:both;
     border:1px solid #000;
     border-top:none;
+    min-height: 50px;
     .delete{
       color:red;
       right:10px;
       top:15px;
       position: absolute;
+      cursor: pointer;
+    }
+    .delete-2{
+      top: 0;
     }
     .add{
       color:red;
       display: inline-block;
       margin-left: 10px;
+      cursor:pointer;
     }
     .zuoyou-left{
       float: left;
       width: 166px;
       text-align: center;
       line-height: 50px;
+      position: relative;
+      .border-right-line{
+        border-right: 1px solid #000;
+        position: absolute;
+        right: -1px;
+        height: 50px;
+        top: 0;
+      }
+      .border-right-line-long{
+        border-right: 1px solid #000;
+        position: absolute;
+        right: -1px;
+        height: 320px;
+        top: 0;
+      }
+      //border-right: 1px solid #000;
+      //&.border-right1px{
+      //  border-right: 1px solid #000;
+      //}
     }
+    .zuoyou-left-chufang{
+      .add{
+        display: block;
+        height: 30px;
+        line-height: 30px;
+      }
+    }
+
     .zuoyou-right{
       float: right;
-      width: 832px;
+      width: 882px;
       .right-line{
         width: 100%;
         height: 50px;
-        border-bottom:1px solid #000;
         position: relative;
         //border-left:1px solid #000;
-        &:last-child{
-          border-bottom: none;
-        }
+        border-top:1px solid #000;
+        &:first-child{
+            border-top: none;
+          }
         .bx{
           display: inline-block;
           border-left: 1px solid #000;
           height: 50px;
           line-height: 50px;
           text-align: center;
-          width: 166px;
+          width: 158px;
+
           //&:first-child{border-left: none;}
+        }
+        .bx:first-child{
         }
         .bx-3{
           width: 498px;
         }
         .bx-2{
-          width: 240px;
+          width: 270px;
         }
         .bx-4{
           width: 424px;
         }
         .bx-5{
-          width: 550px;
+          width: 660px;
+        }
+        .bx-time{
+          text-align: left;
+          text-indent: 10px;
         }
         .ckword{
           margin-left: 8px;
-          margin-right: 40px;
+          margin-right: 15px;
         }
       }
       .oneline{
         line-height:50px;
         border-left:1px solid #000;
         padding-left: 20px;
+        position: relative;
       }
     }
+    .zuoyou-right-box{
+      float: right;
+    }
+  }
+}
+.m-dangan-edit-add{
+    .zuoyou{
+      border-bottom: 1px solid #3c78d8;
   }
 }
 .a-jump{
@@ -205,6 +254,72 @@ div:focus {
 }
 .filter-container{
   margin-bottom:10px;
+}
+.u-timebox{
+  border-right: 1px solid #000;
+  display: inline-block;
+  height: 50px;
+}
+.u-timeinput{
+  height: 40px;
+  line-height: 40px;
+  border: none;
+  width: 60px;
+  position: relative;
+  top: -1px;
+}
+.input-fst{
+  margin-left: 10px;
+}
+.u-otherinput{
+  height: 40px;
+  line-height: 40px;
+  border: none;
+  width: 80px;
+  position: relative;
+  top: -1px;
+}
+.u-otherinput-2{
+  width: 50px;
+}
+.u-otherinput-3{
+  width: 85px;
+}
+.u-otherinput-4{
+  width: 200px;
+}
+.u-otherbox{
+  //border-right: 1px solid #000;
+  display: inline-block;
+  height: 50px;
+}
+.u-otherbox-2{
+  text-indent: 0;
+}
+.u-ml5{
+  margin-left: 5px;
+}
+.u-ml200{
+  margin-left: 200px;
+}
+.u-right-last-line{
+    position: relative;
+    border-bottom: 1px solid #000;
+    bottom: -1px;
+    z-index: -1;
+}
+.u-icon_right{
+  color:#57ef15;
+      font-size: 28px;
+    font-weight: 900;
+}
+.u-icon_wrong{
+  color:#ff0000;
+      font-size: 28px;
+    font-weight: 900;
+}
+.u-title_color{
+  color:#3d85c6
 }
 //@media screen and (min-width:480px){
 //  .m-activity_pc_list_show{
